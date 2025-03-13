@@ -1,4 +1,3 @@
-/* src/app/profesores/page.tsx (Página de Profesores) */
 "use client";
 import React, { useState, useEffect } from "react";
 import { Table, Button, Breadcrumb, Layout, Menu, message } from "antd";
@@ -64,8 +63,8 @@ export default function Profesores() {
   };
 
   return (
-    <Layout>
-      <Sider collapsible>
+    <Layout style={{ height: "100vh" }}>
+      <Sider collapsible style={{ height: "100vh", overflow: "auto" }}>
         <Menu
           theme="dark"
           mode="inline"
@@ -85,14 +84,23 @@ export default function Profesores() {
             display: "flex",
             justifyContent: "space-between",
             padding: "0 16px",
+            height: "64px",
+            lineHeight: "64px",
           }}
         >
-          <h2>Vista de Profesores</h2>
+          <h2 style={{ margin: 0 }}>Vista de Profesores</h2>
           <Link href="/">
             <Button>Modo Padre</Button>
           </Link>
         </Header>
-        <Content style={{ padding: 24, background: "#fff" }}>
+        <Content
+          style={{
+            padding: 24,
+            background: "#fff",
+            height: "calc(100vh - 64px)",
+            overflow: "auto",
+          }}
+        >
           <Breadcrumb style={{ marginBottom: "16px" }}>
             <Breadcrumb.Item>Inicio</Breadcrumb.Item>
             <Breadcrumb.Item>{selectedCourse}</Breadcrumb.Item>
@@ -100,9 +108,9 @@ export default function Profesores() {
           <Table
             dataSource={studentsData[selectedCourse]}
             columns={[
-              { title: "Nombre", dataIndex: "name", key: "name" },
+              { title: "Nombre del Alumno", dataIndex: "name", key: "name" },
               {
-                title: "ETA",
+                title: "Tiempo Estimado de Llegada",
                 dataIndex: "eta",
                 key: "eta",
                 render: (eta) => (eta ? `${eta} min` : "-"),
