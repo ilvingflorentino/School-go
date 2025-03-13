@@ -1,8 +1,9 @@
 "use client";
-import React, { useState, useEffect } from "react";
+
 import { Table, Button, Breadcrumb, Layout, Menu, message } from "antd";
 import { BookOutlined } from "@ant-design/icons";
 import Link from "next/link";
+import { useState, useEffect } from "react";
 
 const { Header, Sider, Content } = Layout;
 
@@ -17,14 +18,60 @@ type Student = {
   name: string;
   status: string;
   eta: number | null;
+  isAtDoor: boolean;
 };
 
 type StudentsData = { [key: string]: Student[] };
 
 const initialStudentsData: StudentsData = {
-  "1A": [{ key: "1", name: "Juan Pérez", status: "Esperando", eta: 10 }],
-  "1B": [{ key: "3", name: "Carlos García", status: "Esperando", eta: 5 }],
-  "2A": [{ key: "5", name: "Pedro Sánchez", status: "Esperando", eta: 20 }],
+  "1A": [
+    {
+      key: "1",
+      name: "Juan Pérez",
+      status: "Esperando",
+      eta: 10,
+      isAtDoor: false,
+    },
+    {
+      key: "2",
+      name: "María López",
+      status: "Esperando",
+      eta: null,
+      isAtDoor: true,
+    },
+  ],
+  "1B": [
+    {
+      key: "3",
+      name: "Carlos García",
+      status: "Esperando",
+      eta: 5,
+      isAtDoor: false,
+    },
+    {
+      key: "4",
+      name: "Ana Martínez",
+      status: "Recogido",
+      eta: null,
+      isAtDoor: false,
+    },
+  ],
+  "2A": [
+    {
+      key: "5",
+      name: "Pedro Sánchez",
+      status: "Esperando",
+      eta: 20,
+      isAtDoor: false,
+    },
+    {
+      key: "6",
+      name: "Lucía Fernández",
+      status: "Esperando",
+      eta: null,
+      isAtDoor: true,
+    },
+  ],
 };
 
 export default function Profesores() {
@@ -55,7 +102,7 @@ export default function Profesores() {
     updatedStudents[selectedCourse] = updatedStudents[selectedCourse].map(
       (student) =>
         student.key === studentKey
-          ? { ...student, status: "Recogido", eta: null }
+          ? { ...student, status: "Recogido", eta: null, isAtDoor: false }
           : student
     );
     setStudentsData(updatedStudents);
@@ -110,10 +157,17 @@ export default function Profesores() {
             columns={[
               { title: "Nombre del Alumno", dataIndex: "name", key: "name" },
               {
-                title: "Tiempo Estimado de Llegada",
-                dataIndex: "eta",
-                key: "eta",
-                render: (eta) => (eta ? `${eta} min` : "-"),
+                title: "Estado",
+                key: "status",
+                render: (_, record) => {
+                  if (record.isAtDoor) {
+                    return <span style={{ color: "green" }}>En la puerta</span>;
+                  } else if (record.eta !== null) {
+                    return <span>{`Llegando en ${record.eta} min`}</span>;
+                  } else {
+                    return <span>{record.status}</span>;
+                  }
+                },
               },
               {
                 title: "Acción",
